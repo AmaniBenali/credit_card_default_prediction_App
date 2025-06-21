@@ -8,3 +8,4 @@ openpyxl
 imbalanced-learn
 joblib
 xlrd>=2.0.1
+numpy
