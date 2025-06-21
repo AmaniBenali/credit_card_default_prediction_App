@@ -113,7 +113,7 @@ if uploaded_file is not None:
 
         # Show predictions
         result_df = pd.DataFrame({
-             'y_true' = y,
+             'y_true' : y_test,
             'Prediction': preds,
             'Probability (Default)': probs
         })
