@@ -106,8 +106,6 @@ if uploaded_file is not None:
         st.error(f"❌ Error: {e}")
 else:
     st.info("👈 Please upload a valid `.xlsx` file")
-# Optional: Choose threshold
-threshold = st.slider("Select threshold for classification", 0.0, 1.0, 0.5, 0.01)
 
 # Ask user to upload actual labels for evaluation
 if st.checkbox("Evaluate model performance on uploaded data"):
