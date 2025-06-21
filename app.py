@@ -119,7 +119,7 @@ real = y_test
 
         # Show predictions
         result_df = pd.DataFrame({
-             'y_true' = Y,
+             'y_true' = real,
             'Prediction': preds,
             'Probability (Default)': probs
         })
