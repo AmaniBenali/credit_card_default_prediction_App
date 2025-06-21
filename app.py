@@ -2,6 +2,11 @@ import streamlit as st
 import pandas as pd
 import joblib
 import os
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import classification_report, confusion_matrix, roc_curve, auc
+import numpy as np
+
 
 from sklearn.preprocessing import StandardScaler
 
@@ -65,3 +70,40 @@ if uploaded_file is not None:
         st.error(f"❌ Error: {e}")
 else:
     st.info("👈 Please upload a valid `.xlsx` file")
+def show_model_metrics(model_name, y_test, y_proba, threshold=0.5):
+    # Apply threshold to probability to get predictions
+    y_pred = (y_proba >= threshold).astype(int)
+
+    st.subheader(f"Performance Metrics for {model_name}")
+
+    # Confusion Matrix
+    cm = confusion_matrix(y_test, y_pred)
+    fig, ax = plt.subplots()
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
+    ax.set_xlabel('Predicted')
+    ax.set_ylabel('Actual')
+    ax.set_title('Confusion Matrix')
+    st.pyplot(fig)
+
+    # Classification Report
+    report = classification_report(y_test, y_pred, output_dict=True)
+    report_df = pd.DataFrame(report).transpose()
+    st.dataframe(report_df.style.format("{:.2f}"))
+
+    # ROC Curve
+    fpr, tpr, _ = roc_curve(y_test, y_proba)
+    roc_auc = auc(fpr, tpr)
+
+    fig2, ax2 = plt.subplots()
+    ax2.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
+    ax2.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+    ax2.set_xlim([0.0, 1.0])
+    ax2.set_ylim([0.0, 1.05])
+    ax2.set_xlabel('False Positive Rate')
+    ax2.set_ylabel('True Positive Rate')
+    ax2.set_title('Receiver Operating Characteristic')
+    ax2.legend(loc="lower right")
+    st.pyplot(fig2)
+
+    # Display current threshold
+    st.markdown(f"**Current threshold:** {threshold:.2f}")
