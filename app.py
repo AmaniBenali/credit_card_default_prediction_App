@@ -70,6 +70,7 @@ if uploaded_file is not None:
         # Clean and preprocess just like training
         input_data = input_data.rename(columns={'default payment next month': 'def_pay', 'PAY_0': 'PAY_1'})
         input_data['EDUCATION'] = input_data['EDUCATION'].replace([0, 6], 5)
+        input_data['MARRIAGE'] = input_data['MARRIAGE'].replace(0, 3)
         input_data['SEX_female'] = input_data['SEX'].apply(lambda x: 1 if x == 2 else 0)
         input_data['MARRIAGE_married'] = input_data['MARRIAGE'].apply(lambda x: 1 if x == 1 else 0)
         input_data['MARRIAGE_single'] = input_data['MARRIAGE'].apply(lambda x: 1 if x == 2 else 0)
