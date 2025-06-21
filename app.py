@@ -10,9 +10,7 @@ from sklearn.model_selection import train_test_split
 
 
 from sklearn.preprocessing import StandardScaler
-def show_model_metrics(model_name, y_test, preds, threshold=0.5):
-    # Apply threshold to probability to get predictions
-    y_pred = (y_proba >= threshold).astype(int)
+def show_model_metrics(model_name, y_test, preds):
     st.subheader(f"Performance Metrics for {model_name}")
 
     cm = confusion_matrix(y_test, preds)
@@ -85,9 +83,7 @@ if uploaded_file is not None:
 
         # Standardize test set only (assuming training was already scaled in .pkl model)
         X_res_test_stand = scaler.transform(X_test)
-        X_res_train_stand = scaler.transform(X_train)
-
-
+    
         # Select model
         model_name = st.selectbox("Select model to predict", list(model_dict.keys()), key="model_selector")
         model = model_dict[model_name]
@@ -113,4 +109,4 @@ if uploaded_file is not None:
     except Exception as e:
         st.error(f"❌ Error: {e}")
 else:
-    st.info("👈 Please upload a valid .xlsx file")
+    st.info("👈 Please upload a valid .xls file")
