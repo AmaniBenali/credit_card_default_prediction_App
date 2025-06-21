@@ -88,7 +88,7 @@ if uploaded_file is not None:
         
 
 # Drop ID
-X_input = X_input.drop('ID', axis=1)
+X_input =  X_input.drop('ID', axis=1)
 
 # Train-test split (only needed if you want metrics — optional)
 X_train, X_test, y_train, y_test = train_test_split(X_input, Y, test_size=0.3, random_state=123)
