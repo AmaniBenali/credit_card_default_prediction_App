@@ -13,7 +13,6 @@ def show_model_metrics(model_name, y_test, y_proba, threshold=0.5):
 
     st.subheader(f"Performance Metrics for {model_name}")
 
-    # Confusion Matrix
     cm = confusion_matrix(y_test, y_pred)
     fig, ax = plt.subplots()
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
@@ -22,12 +21,10 @@ def show_model_metrics(model_name, y_test, y_proba, threshold=0.5):
     ax.set_title('Confusion Matrix')
     st.pyplot(fig)
 
-    # Classification Report
     report = classification_report(y_test, y_pred, output_dict=True)
     report_df = pd.DataFrame(report).transpose()
     st.dataframe(report_df.style.format("{:.2f}"))
 
-    # ROC Curve
     fpr, tpr, _ = roc_curve(y_test, y_proba)
     roc_auc = auc(fpr, tpr)
 
@@ -44,7 +41,6 @@ def show_model_metrics(model_name, y_test, y_proba, threshold=0.5):
 
     st.markdown(f"**Current threshold:** {threshold:.2f}")
 
-# Load models
 model_dict = {
     "Logistic Regression": joblib.load("models/log_reg.pkl"),
     "KNN (k=13)": joblib.load("models/knn.pkl"),
@@ -62,7 +58,6 @@ if uploaded_file is not None:
     try:
         input_data = pd.read_excel(uploaded_file, sheet_name="Data")
 
-        # Preprocessing
         input_data = input_data.rename(columns={'default payment next month': 'def_pay'})
         input_data['EDUCATION'] = input_data['EDUCATION'].replace([0, 6], 5)
         input_data['MARRIAGE'] = input_data['MARRIAGE'].replace(0, 3)
@@ -80,24 +75,17 @@ if uploaded_file is not None:
 
         Y = input_data['def_pay']
         X_input = input_data.drop('def_pay', axis=1)
-
-        # Drop ID column if exists
         if 'ID' in X_input.columns:
             X_input = X_input.drop('ID', axis=1)
 
-        # Split train-test (optional, for metrics)
         X_train, X_test, y_train, y_test = train_test_split(X_input, Y, test_size=0.3, random_state=123)
-
-        # Scale data
         scaler = StandardScaler()
         X_train_scaled = scaler.fit_transform(X_train)
         X_test_scaled = scaler.transform(X_test)
 
-        # Single selectbox with unique key
-        model_name = st.selectbox("Select model to predict", list(model_dict.keys()), key="model_select_unique")
+        model_name = st.selectbox("Select model to predict", list(model_dict.keys()), key="model_selector")
         model = model_dict[model_name]
 
-        # Predict on test data
         preds = model.predict(X_test_scaled)
         probs = model.predict_proba(X_test_scaled)[:, 1]
 
@@ -117,6 +105,5 @@ if uploaded_file is not None:
 
     except Exception as e:
         st.error(f"❌ Error: {e}")
-
 else:
     st.info("👈 Please upload a valid `.xls` file")
