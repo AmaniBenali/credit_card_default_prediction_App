@@ -8,7 +8,6 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_curve, 
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-
 from sklearn.preprocessing import StandardScaler
 def show_model_metrics(model_name, y_test, y_proba, threshold=0.5):
     # Apply threshold to probability to get predictions
