@@ -82,10 +82,12 @@ if uploaded_file is not None:
         input_data['EDUCATION_high_school'] = input_data['EDUCATION'].apply(lambda x: 1 if x == 3 else 0)
         input_data['EDUCATION_others'] = input_data['EDUCATION'].apply(lambda x: 1 if x == 4 else 0)
         input_data = input_data.drop(['EDUCATION'], axis=1)
-        Y= input_data['def_pay']
+        
+                Y = input_data['def_pay']
         X_input = input_data.drop('def_pay', axis=1)
         # Drop ID
-        X_input =  X_input.drop('ID', axis=1)
+        X_input = X_input.drop('ID', axis=1)
+
         # Train-test split (only needed if you want metrics — optional)
         X_train, X_test, y_train, y_test = train_test_split(X_input, Y, test_size=0.3, random_state=123)
 
@@ -94,7 +96,7 @@ if uploaded_file is not None:
         X_train_scaled = scaler.fit_transform(X_train)
         X_test_scaled = scaler.transform(X_test)
 
-        # Now use X_test_scaled as input to the model
+        # Model selection (only once)
         model_name = st.selectbox("Select model to predict", list(model_dict.keys()))
         model = model_dict[model_name]
 
@@ -104,7 +106,7 @@ if uploaded_file is not None:
 
         # Show predictions
         result_df = pd.DataFrame({
-             'y_true' : y_test,
+            'y_true': y_test,
             'Prediction': preds,
             'Probability (Default)': probs
         })
@@ -115,11 +117,11 @@ if uploaded_file is not None:
     except Exception as e:
         st.error(f"❌ Error: {e}")
 else:
-    st.info("👈 Please upload a valid `.xlsx` file")
+    st.info("👈 Please upload a valid `.xls` file")
 
-# Ask user to upload actual labels for evaluation
-if st.checkbox("Evaluate model performance on uploaded data"):
-            y_true = input_data['def_pay'].values  # True labels from uploaded data
-            show_model_metrics(model_name, y_true, probs)
-
+# Evaluate model performance checkbox
+if uploaded_file is not None:
+    if st.checkbox("Evaluate model performance on uploaded data"):
+        y_true = input_data['def_pay'].values  # True labels from uploaded data
+        show_model_metrics(model_name, y_true, probs)
 
