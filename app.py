@@ -17,10 +17,10 @@ scaler = joblib.load("models/scaler.pkl")
 
 # Title
 st.title("Credit Card Default Prediction")
-st.write("Upload your processed `.xlsx` file (with same format used during training).")
+st.write("Upload your processed `.xls` file .")
 
 # File uploader
-uploaded_file = st.file_uploader("Upload input file (.xlsx)", type=["xlsx"])
+uploaded_file = st.file_uploader("Upload input file (.xls)", type=["xls"])
 
 if uploaded_file is not None:
     try:
