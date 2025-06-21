@@ -70,6 +70,14 @@ if uploaded_file is not None:
         st.error(f"❌ Error: {e}")
 else:
     st.info("👈 Please upload a valid `.xlsx` file")
+# Optional: Choose threshold
+threshold = st.slider("Select threshold for classification", 0.0, 1.0, 0.5, 0.01)
+
+# Ask user to upload actual labels for evaluation
+if st.checkbox("Evaluate model performance on uploaded data"):
+            y_true = input_data['def_pay'].values  # True labels from uploaded data
+            show_model_metrics(model_name, y_true, probs, threshold)
+
 def show_model_metrics(model_name, y_test, y_proba, threshold=0.5):
     # Apply threshold to probability to get predictions
     y_pred = (y_proba >= threshold).astype(int)
