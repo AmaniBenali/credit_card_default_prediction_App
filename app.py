@@ -8,7 +8,9 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_curve, 
 import numpy as np
 
 from sklearn.preprocessing import StandardScaler
- def show_model_metrics(model_name, y_test, y_proba):
+def show_model_metrics(model_name, y_test, y_proba, threshold=0.5):
+    # Apply threshold to probability to get predictions
+    y_pred = (y_proba >= threshold).astype(int)
     st.subheader(f"Performance Metrics for {model_name}")
 
     cm = confusion_matrix(y_test, y_pred)
