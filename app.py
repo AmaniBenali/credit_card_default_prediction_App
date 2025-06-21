@@ -105,7 +105,7 @@ if uploaded_file is not None:
        
         if st.checkbox("Evaluate model performance"):
            # threshold = st.slider("Select classification threshold", 0.0, 1.0, 0.5, 0.01)
-            show_model_metrics(model_name, y_test.value, probs)
+            show_model_metrics(model_name, y_test, preds)
     except Exception as e:
         st.error(f"❌ Error: {e}")
 else:
