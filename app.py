@@ -85,26 +85,23 @@ if uploaded_file is not None:
         input_data = input_data.drop(['EDUCATION'], axis=1)
         Y= input_data['def_pay']
         X_input = input_data.drop('def_pay', axis=1)
-        
+        # Drop ID
+        X_input =  X_input.drop('ID', axis=1)
+        # Train-test split (only needed if you want metrics — optional)
+        X_train, X_test, y_train, y_test = train_test_split(X_input, Y, test_size=0.3, random_state=123)
 
-# Drop ID
-X_input =  X_input.drop('ID', axis=1)
+        # Standardize using training data
+        scaler = StandardScaler()
+        X_train_scaled = scaler.fit_transform(X_train)
+        X_test_scaled = scaler.transform(X_test)
 
-# Train-test split (only needed if you want metrics — optional)
-X_train, X_test, y_train, y_test = train_test_split(X_input, Y, test_size=0.3, random_state=123)
+        # Now use X_test_scaled as input to the model
+        model_name = st.selectbox("Select model to predict", list(model_dict.keys()))
+        model = model_dict[model_name]
 
-# Standardize using training data
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
-
-# Now use X_test_scaled as input to the model
-model_name = st.selectbox("Select model to predict", list(model_dict.keys()))
-model = model_dict[model_name]
-
-# Predict
-preds = model.predict(X_test_scaled)
-probs = model.predict_proba(X_test_scaled)[:, 1]
+       # Predict
+       preds = model.predict(X_test_scaled)
+       probs = model.predict_proba(X_test_scaled)[:, 1]
 
         # Select model
         model_name = st.selectbox("Select model to predict", list(model_dict.keys()))
