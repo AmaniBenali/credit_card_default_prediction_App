@@ -110,6 +110,6 @@ else:
 # Ask user to upload actual labels for evaluation
 if st.checkbox("Evaluate model performance on uploaded data"):
             y_true = input_data['def_pay'].values  # True labels from uploaded data
-            show_model_metrics(model_name, y_true, probs, threshold)
+            show_model_metrics(model_name, y_true, probs)
 
 
