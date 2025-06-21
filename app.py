@@ -106,9 +106,6 @@ model = model_dict[model_name]
 preds = model.predict(X_test_scaled)
 probs = model.predict_proba(X_test_scaled)[:, 1]
 
-# For display later
-real = y_test
-
         # Select model
         model_name = st.selectbox("Select model to predict", list(model_dict.keys()))
         model = model_dict[model_name]
@@ -119,7 +116,7 @@ real = y_test
 
         # Show predictions
         result_df = pd.DataFrame({
-             'y_true' = real,
+             'y_true' = y,
             'Prediction': preds,
             'Probability (Default)': probs
         })
