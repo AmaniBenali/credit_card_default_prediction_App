@@ -31,7 +31,7 @@ if uploaded_file is not None:
         input_data = pd.read_excel(uploaded_file, sheet_name="Data")
 
         # Clean and preprocess just like training
-                input_data = input_data.rename(columns={'default payment next month': 'def_pay'})
+        input_data = input_data.rename(columns={'default payment next month': 'def_pay'})
         input_data['EDUCATION'] = input_data['EDUCATION'].replace([0, 6], 5)
         input_data['MARRIAGE'] = input_data['MARRIAGE'].replace(0, 3)
         input_data = input_data.rename(columns={'PAY_0': 'PAY_1'})
