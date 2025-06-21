@@ -10,12 +10,12 @@ from sklearn.model_selection import train_test_split
 
 
 from sklearn.preprocessing import StandardScaler
-def show_model_metrics(model_name, y_test, y_proba, threshold=0.5):
+def show_model_metrics(model_name, y_test, preds, threshold=0.5):
     # Apply threshold to probability to get predictions
     y_pred = (y_proba >= threshold).astype(int)
     st.subheader(f"Performance Metrics for {model_name}")
 
-    cm = confusion_matrix(y_test, y_pred)
+    cm = confusion_matrix(y_test, preds)
     fig, ax = plt.subplots()
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
     ax.set_xlabel('Predicted')
@@ -23,11 +23,11 @@ def show_model_metrics(model_name, y_test, y_proba, threshold=0.5):
     ax.set_title('Confusion Matrix')
     st.pyplot(fig)
 
-    report = classification_report(y_test, y_pred, output_dict=True)
+    report = classification_report(y_test, preds, output_dict=True)
     report_df = pd.DataFrame(report).transpose()
     st.dataframe(report_df.style.format("{:.2f}"))
 
-    fpr, tpr, _ = roc_curve(y_test, y_proba)
+    fpr, tpr, _ = roc_curve(y_test, preds)
     roc_auc = auc(fpr, tpr)
 
     fig2, ax2 = plt.subplots()
@@ -93,8 +93,8 @@ if uploaded_file is not None:
         model = model_dict[model_name]
 
         # Predict
-        preds = model.predict(X_res_train_stand)
-        probs = model.predict_proba(X_res_train_stand)[:, 1]
+        preds = model.predict(X_res_test_stand)
+        probs = model.predict_proba(X_res_test_stand)[:, 1]
 
         # Show predictions
         result_df = pd.DataFrame({
