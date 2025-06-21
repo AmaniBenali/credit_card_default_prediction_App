@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import classification_report, confusion_matrix, roc_curve, auc
 import numpy as np
+from sklearn.model_selection import train_test_split
 
 
 from sklearn.preprocessing import StandardScaler
@@ -86,8 +87,27 @@ if uploaded_file is not None:
         X_input = input_data.drop('def_pay', axis=1)
         
 
-        # Standardize
-        X_scaled = scaler.transform(X_input)
+# Drop ID
+X_input = X_input.drop('ID', axis=1)
+
+# Train-test split (only needed if you want metrics — optional)
+X_train, X_test, y_train, y_test = train_test_split(X_input, Y, test_size=0.3, random_state=123)
+
+# Standardize using training data
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Now use X_test_scaled as input to the model
+model_name = st.selectbox("Select model to predict", list(model_dict.keys()))
+model = model_dict[model_name]
+
+# Predict
+preds = model.predict(X_test_scaled)
+probs = model.predict_proba(X_test_scaled)[:, 1]
+
+# For display later
+real = y_test
 
         # Select model
         model_name = st.selectbox("Select model to predict", list(model_dict.keys()))
