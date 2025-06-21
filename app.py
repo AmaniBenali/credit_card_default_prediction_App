@@ -68,20 +68,23 @@ if uploaded_file is not None:
         input_data = pd.read_excel(uploaded_file, sheet_name="Data")
 
         # Clean and preprocess just like training
-        input_data = input_data.rename(columns={'default payment next month': 'def_pay', 'PAY_0': 'PAY_1'})
+        input_data = input_data.rename(columns={'default payment next month': 'def_pay'})
         input_data['EDUCATION'] = input_data['EDUCATION'].replace([0, 6], 5)
         input_data['MARRIAGE'] = input_data['MARRIAGE'].replace(0, 3)
+        input_data = input_data.rename(columns={'PAY_0': 'PAY_1'})
         input_data['SEX_female'] = input_data['SEX'].apply(lambda x: 1 if x == 2 else 0)
+        input_data = input_data.drop('SEX', axis=1)
         input_data['MARRIAGE_married'] = input_data['MARRIAGE'].apply(lambda x: 1 if x == 1 else 0)
         input_data['MARRIAGE_single'] = input_data['MARRIAGE'].apply(lambda x: 1 if x == 2 else 0)
+        input_data = input_data.drop('MARRIAGE', axis=1)
         input_data['EDUCATION_graduate_school'] = input_data['EDUCATION'].apply(lambda x: 1 if x == 1 else 0)
         input_data['EDUCATION_university'] = input_data['EDUCATION'].apply(lambda x: 1 if x == 2 else 0)
         input_data['EDUCATION_high_school'] = input_data['EDUCATION'].apply(lambda x: 1 if x == 3 else 0)
         input_data['EDUCATION_others'] = input_data['EDUCATION'].apply(lambda x: 1 if x == 4 else 0)
-
-        input_data.drop(['SEX', 'MARRIAGE', 'EDUCATION'], axis=1, inplace=True)
+        input_data = input_data.drop(['EDUCATION'], axis=1)
+        Y= input_data['def_pay']
         X_input = input_data.drop('def_pay', axis=1)
-        X_input = X_input.drop('ID', axis=1)
+        
 
         # Standardize
         X_scaled = scaler.transform(X_input)
@@ -91,6 +94,7 @@ if uploaded_file is not None:
         model = model_dict[model_name]
 
         # Predict
+        y_true = Y
         preds = model.predict(X_scaled)
         probs = model.predict_proba(X_scaled)[:, 1]
 
