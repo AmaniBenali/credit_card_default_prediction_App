@@ -94,12 +94,12 @@ if uploaded_file is not None:
         model = model_dict[model_name]
 
         # Predict
-        y_true = Y
         preds = model.predict(X_scaled)
         probs = model.predict_proba(X_scaled)[:, 1]
 
         # Show predictions
         result_df = pd.DataFrame({
+             'y_true' = Y,
             'Prediction': preds,
             'Probability (Default)': probs
         })
