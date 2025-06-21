@@ -103,14 +103,6 @@ if uploaded_file is not None:
         preds = model.predict(X_test_scaled)
         probs = model.predict_proba(X_test_scaled)[:, 1]
 
-        # Select model
-        model_name = st.selectbox("Select model to predict", list(model_dict.keys()))
-        model = model_dict[model_name]
-
-        # Predict
-        preds = model.predict(X_scaled)
-        probs = model.predict_proba(X_scaled)[:, 1]
-
         # Show predictions
         result_df = pd.DataFrame({
              'y_true' : y_test,
