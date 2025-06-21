@@ -83,7 +83,7 @@ if uploaded_file is not None:
         input_data['EDUCATION_others'] = input_data['EDUCATION'].apply(lambda x: 1 if x == 4 else 0)
         input_data = input_data.drop(['EDUCATION'], axis=1)
         
-                Y = input_data['def_pay']
+        Y = input_data['def_pay']
         X_input = input_data.drop('def_pay', axis=1)
         # Drop ID
         X_input = X_input.drop('ID', axis=1)
@@ -96,8 +96,8 @@ if uploaded_file is not None:
         X_train_scaled = scaler.fit_transform(X_train)
         X_test_scaled = scaler.transform(X_test)
 
-        # Model selection (only once)
-        model_name = st.selectbox("Select model to predict", list(model_dict.keys()))
+        # Model selection 
+        model_name = st.selectbox("Select model to predict", list(model_dict.keys()), key="model_select")
         model = model_dict[model_name]
 
         # Predict
