@@ -6,38 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import classification_report, confusion_matrix, roc_curve, auc
 import numpy as np
-
 from sklearn.preprocessing import StandardScaler
-def show_model_metrics(model_name, y_test, y_proba, threshold=0.5):
-    # Apply threshold to probability to get predictions
-    y_pred = (y_proba >= threshold).astype(int)
-    st.subheader(f"Performance Metrics for {model_name}")
-
-    cm = confusion_matrix(y_test, y_pred)
-    fig, ax = plt.subplots()
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
-    ax.set_xlabel('Predicted')
-    ax.set_ylabel('Actual')
-    ax.set_title('Confusion Matrix')
-    st.pyplot(fig)
-
-    report = classification_report(y_test, y_pred, output_dict=True)
-    report_df = pd.DataFrame(report).transpose()
-    st.dataframe(report_df.style.format("{:.2f}"))
-
-    fpr, tpr, _ = roc_curve(y_test, y_proba)
-    roc_auc = auc(fpr, tpr)
-
-    fig2, ax2 = plt.subplots()
-    ax2.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
-    ax2.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
-    ax2.set_xlim([0.0, 1.0])
-    ax2.set_ylim([0.0, 1.05])
-    ax2.set_xlabel('False Positive Rate')
-    ax2.set_ylabel('True Positive Rate')
-    ax2.set_title('Receiver Operating Characteristic')
-    ax2.legend(loc="lower right")
-    st.pyplot(fig2)
 
 # Load models and scaler
 model_dict = {
@@ -54,7 +23,7 @@ st.title("Credit Card Default Prediction")
 st.write("Upload your processed `.xls` file .")
 
 # File uploader
-uploaded_file = st.file_uploader("Upload input file (.xls)", type=["xls"])
+uploaded_file = st.file_uploader("Upload input file (.xls)", type=["xls"], key="file_uploader")
 
 if uploaded_file is not None:
     try:
@@ -82,7 +51,7 @@ if uploaded_file is not None:
         # Standardize
         X_scaled = scaler.transform(X_input)
 
-        # Select model
+        # Select model (assigning unique key)
         model_name = st.selectbox("Select model to predict", list(model_dict.keys()), key="model_selector")
         model = model_dict[model_name]
 
@@ -99,12 +68,7 @@ if uploaded_file is not None:
         st.write(result_df)
 
         st.success("✅ Completed Prediction")
-        if st.checkbox("Evaluate model performance on uploaded data"):
-        y_true = input_data['def_pay'].values
-        show_model_metrics(model_name, y_true, probs, threshold)
     except Exception as e:
         st.error(f"❌ Error: {e}")
 else:
     st.info("👈 Please upload a valid `.xlsx` file")
-
-
