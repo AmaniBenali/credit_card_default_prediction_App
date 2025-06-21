@@ -53,7 +53,7 @@ if uploaded_file is not None:
         X_scaled = scaler.transform(X_input)
 
         # Select model
-        model_name = st.selectbox("Select model to predict", list(model_dict.keys()))
+        model_name = st.selectbox("Select model to predict", list(model_dict.keys()), key="model_selector")
         model = model_dict[model_name]
 
         # Predict
