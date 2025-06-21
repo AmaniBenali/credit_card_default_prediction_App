@@ -57,7 +57,6 @@ uploaded_file = st.file_uploader("Upload input file (.xls)", type=["xls"])
 if uploaded_file is not None:
     try:
         input_data = pd.read_excel(uploaded_file, sheet_name="Data")
-
         input_data = input_data.rename(columns={'default payment next month': 'def_pay'})
         input_data['EDUCATION'] = input_data['EDUCATION'].replace([0, 6], 5)
         input_data['MARRIAGE'] = input_data['MARRIAGE'].replace(0, 3)
