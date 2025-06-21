@@ -101,7 +101,7 @@ if uploaded_file is not None:
         st.success("✅ Completed Prediction")
        
         if st.checkbox("Evaluate model performance on uploaded data"):
-            threshold = st.slider("Select classification threshold", 0.0, 1.0, 0.5, 0.01)
+           # threshold = st.slider("Select classification threshold", 0.0, 1.0, 0.5, 0.01)
             show_model_metrics(model_name, Y.values, probs, threshold)
     except Exception as e:
         st.error(f"❌ Error: {e}")
