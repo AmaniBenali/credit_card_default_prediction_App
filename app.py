@@ -99,8 +99,9 @@ if uploaded_file is not None:
         st.write(result_df)
 
         st.success("✅ Completed Prediction")
-        if st.checkbox("Evaluate model performance on uploaded data"):
-            show_model_metrics(model_name, Y.values, probs)
+if st.checkbox("Evaluate model performance on uploaded data"):
+    y_true = input_data['def_pay'].values
+    show_model_metrics(model_name, y_true, probs, threshold)
     except Exception as e:
         st.error(f"❌ Error: {e}")
 else:
