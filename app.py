@@ -79,7 +79,7 @@ if uploaded_file is not None:
         X_input = input_data.drop('def_pay', axis=1)
         X_input = X_input.drop('ID', axis=1)
         # Before scaling
-        X_train, X_test, y_train, y_test = train_test_split(X_input, Y, test_size=0.5, random_state=123)
+        X_train, X_test, y_train, y_test = train_test_split(X_input, Y, test_size=0.3, random_state=123)
 
         # Standardize test set only (assuming training was already scaled in .pkl model)
         X_res_test_stand = scaler.transform(X_test)
