@@ -42,7 +42,7 @@ def show_model_metrics(model_name, y_test, preds):
 # Load models and scaler
 model_dict = {
     "Logistic Regression": joblib.load("models/log_reg.pkl"),
-    "KNN (k=13)": joblib.load("models/knn.pkl"),
+    "KNN (k=10)": joblib.load("models/knn.pkl"),
     "Decision Tree": joblib.load("models/dtree.pkl"),
     "SVM": joblib.load("models/svc.pkl"),
     "XGBoost": joblib.load("models/xgboost.pkl")
@@ -51,7 +51,7 @@ scaler = joblib.load("models/scaler.pkl")
 
 # Title
 st.title("Credit Card Default Prediction")
-st.write("Upload your processed .xls file .")
+st.write("Upload your .xls file .")
 
 # File uploader
 uploaded_file = st.file_uploader("Upload input file (.xls)", type=["xls"])
