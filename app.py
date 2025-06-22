@@ -91,7 +91,11 @@ if uploaded_file is not None:
         # Predict
         preds = model.predict(X_res_test_stand)
         probs = model.predict_proba(X_res_test_stand)[:, 1]
+        # Let user choose threshold
+        threshold = st.slider("Select classification threshold", min_value=0.0, max_value=1.0, value=0.5, step=0.01)
 
+        # Predict based on chosen threshold
+        preds = (probs >= threshold).astype(int)  
         # Show predictions
         result_df = pd.DataFrame({
             'Actual': y_test.values,
